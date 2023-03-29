@@ -1,0 +1,4 @@
+dependencies:
+- type: git
+  url: www.facebook.com
+  tag: release/1.2.3

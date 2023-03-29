@@ -1,0 +1,13 @@
+stagingDirectory: submodules
+
+instructions:
+- path: examples/submal.yaml
+
+dependencies:
+- type: git
+  url: https://github.com/CiaranMcAndrew/ml-annotations.git
+  commit: latest
+- type: git
+  url: www.google.com
+  branch: refs/feature/1
+  commit: abcd1234
