@@ -69,10 +69,23 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
             dependencies = this.Dependencies;
         end
 
-        function dependencies = getAllDependencies(this)
+        function dependencies = getDependencies(this, scope)
+            
+            arguments
+                this
+                scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "local"
+            end
+            
             dependencies = this.Dependencies;
-            for i = this.Instructions'
-                dependencies = [dependencies; i.Dependencies];
+
+            switch scope
+                case 'local'
+                    % Return
+
+                case 'all'
+                    for i = this.Instructions'
+                        dependencies = [dependencies; i.Dependencies];
+                    end
             end
         end
 
@@ -82,16 +95,32 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
                 scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "local"
             end
 
-            switch scope
-                case "local"
-                    dependencies = this.Dependencies;
-                case "all"
-                    dependencies = this.getAllDependencies();
-            end
+            dependencies = this.getDependencies(scope);
 
             warning('off', 'MATLAB:structOnObject');
             tbl = struct2table(arrayfun(@struct, dependencies));
             warning('on', 'MATLAB:structOnObject');
+        end
+        
+        function fetchDependencies(this, scope)
+            arguments
+                this
+                scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "local"
+            end
+
+            dependencies = this.getDependencies(scope);
+            
+            % Look for staging directory and create if necessary
+            if ~isfolder(this.StagingDirectory)
+                disp("Creating staging directory: " + this.StagingDirectory);
+                mkdir(this.StagingDirectory)
+            end
+
+            % Fetch each dependency
+            % dependencies.fetch()
+            arrayfun(@(x) x.fetch(this.StagingDirectory), dependencies, 'UniformOutput', false);
+
+
         end
 
     end

@@ -2,16 +2,24 @@ classdef Dependency < mal.SerialisableObject & matlab.mixin.Heterogeneous
     %DEPENDENCY Summary of this class goes here
     %   Detailed explanation goes here
 
-    properties
-        type {mustBeMember(type, ["git", "none"])} = "none"
+    properties (Abstract)
+        Name
     end
+
+    properties
+        Type {mustBeMember(Type, ["git", "none"])} = "none"
+    end
+
+    
 
     methods
         function this = Dependency()
             % Blank constructor
         end
+    end
 
-
+    methods (Abstract)
+        fetch(this)
     end
 
     methods (Static)
