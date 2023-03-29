@@ -73,7 +73,7 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
             
             arguments
                 this
-                scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "local"
+                scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "all"
             end
             
             dependencies = this.Dependencies;
@@ -92,7 +92,7 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
         function tbl = getDependencyTable(this, scope)
             arguments
                 this
-                scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "local"
+                scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "all"
             end
 
             dependencies = this.getDependencies(scope);
@@ -105,7 +105,7 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
         function fetchDependencies(this, scope)
             arguments
                 this
-                scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "local"
+                scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "all"
             end
 
             dependencies = this.getDependencies(scope);
