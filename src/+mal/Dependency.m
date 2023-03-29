@@ -39,7 +39,7 @@ classdef Dependency < mal.SerialisableObject & matlab.mixin.Heterogeneous
                     switch s.type
                         case "git"
                             obj = GitDependency();
-
+                        
                     end
 
                     obj.assignProperties(s)

@@ -24,11 +24,26 @@ classdef GitDependency < mal.Dependency
             
             disp("Adding git submodule: " + this.Name + " - " + this.Url);
             directory = fullfile(stagingDirectory, this.Name);
+            
+            % Remove existing submodule
+            try
+                cmd = "git rm " + directory;
+                [status, cmdout] = system(cmd);
+            end
+           
+            % Delete directory
+            status = rmdir(directory);
+
+            % Add submodule
             cmd = "git submodule add " + this.Url + " " + directory;
-            status = system(cmd);
+            [status, cmdout] = system(cmd);
             if status ~= 0
                 error("Error adding git submodule " + this.Url);
             end
+
+            % Init submodule
+            cd(directory);
+            cd(pwd);
         end
     end
 
