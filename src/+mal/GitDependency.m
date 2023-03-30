@@ -26,7 +26,8 @@ classdef GitDependency < mal.Dependency
             directory = join([stagingDirectory, this.Name], '/');
             
             % Delete directory
-            rmdir(directory, 's');
+            status = rmdir(directory, 's');
+            assert(~isdir(directory));
             
             % Create new directory and cd
             mkdir(directory);
@@ -44,7 +45,11 @@ classdef GitDependency < mal.Dependency
                 this.ExecCmd(cmd)
 
                 % Pull
-                cmd = "git pull origin " + this.Branch;
+                % cmd = "git pull origin";
+                % this.ExecCmd(cmd)
+
+                % Checkout branch
+                cmd = "git checkout " + this.Branch;
                 this.ExecCmd(cmd)
 
             catch ex
@@ -97,7 +102,7 @@ classdef GitDependency < mal.Dependency
                 end
                 
                 if raiseError
-                    error("Error adding git submodule: " + cmd);
+                    error("Error executing system command: " + cmd);
                     if onError ~= @nan
                         feval(onError)
                     end

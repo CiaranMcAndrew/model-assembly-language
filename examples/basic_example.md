@@ -7,15 +7,19 @@ filename = "examples\mal.yaml"
 ```
 
 ```matlab:Code
-s = yaml.loadFile(filename)
+disp(fileread(filename));
 ```
 
 ```text:Output
-s = 
-    stagingDirectory: "submodules"
-        instructions: {[1x1 struct]}
-        dependencies: {[1x1 struct]}
+stagingDirectory: submodules
 
+instructions:
+- path: examples/submal.yaml
+
+dependencies:
+- type: git
+  url: https://github.com/CiaranMcAndrew/mal-example-a.git
+  commit: latest
 ```
 
 ```matlab:Code
@@ -34,21 +38,6 @@ instructions =
 ```
 
 ```matlab:Code
-instructions.Instructions
-```
-
-```text:Output
-ans = 
-  ModelAssemblyInstructions with properties:
-
-            Filename: "examples/submal.yaml"
-    StagingDirectory: "subs"
-        Instructions: []
-        Dependencies: [1x1 mal.GitDependency]
-
-```
-
-```matlab:Code
 instructions.getDependencyTable()
 ```
 
@@ -56,10 +45,6 @@ instructions.getDependencyTable()
 |:--:|:--:|:--:|:--:|:--:|:--:|:--:|
 |1|"mal-example-a.git"|"https://github.com/...|[]|"main"|"latest"|"git"|
 |2|"www.facebook.com"|"www.facebook.com"|"release/1.2.3"|"main"|"latest"|"git"|
-
-```matlab:Code
-% instructions.getDependencyTable("local")
-```
 
 ```matlab:Code
 instructions.fetchDependencies("local")
