@@ -14,7 +14,7 @@ s = yaml.loadFile(filename)
 s = 
     stagingDirectory: "submodules"
         instructions: {[1x1 struct]}
-        dependencies: {[1x1 struct]  [1x1 struct]}
+        dependencies: {[1x1 struct]}
 
 ```
 
@@ -29,7 +29,7 @@ instructions =
             Filename: "examples\mal.yaml"
     StagingDirectory: "submodules"
         Instructions: [1x1 mal.ModelAssemblyInstructions]
-        Dependencies: [2x1 mal.GitDependency]
+        Dependencies: [1x1 mal.GitDependency]
 
 ```
 
@@ -52,21 +52,27 @@ ans =
 instructions.getDependencyTable()
 ```
 
-| |url|branch|tag|commit|type|
-|:--:|:--:|:--:|:--:|:--:|:--:|
-|1|"https://github.com/...|[]|[]|"latest"|"git"|
-|2|"www.google.com"|"refs/feature/1"|[]|"abcd1234"|"git"|
+| |Name|Url|Branch|Tag|Commit|Type|
+|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+|1|"mal-example-a.git"|"https://github.com/...|[]|[]|"latest"|"git"|
+|2|"www.facebook.com"|"www.facebook.com"|[]|"release/1.2.3"|"latest"|"git"|
 
 ```matlab:Code
-instructions.getDependencyTable("all")
+% instructions.getDependencyTable("local")
 ```
 
-| |url|branch|tag|commit|type|
-|:--:|:--:|:--:|:--:|:--:|:--:|
-|1|"https://github.com/...|[]|[]|"latest"|"git"|
-|2|"www.google.com"|"refs/feature/1"|[]|"abcd1234"|"git"|
-|3|"www.facebook.com"|[]|"release/1.2.3"|"latest"|"git"|
-
 ```matlab:Code
+instructions.fetchDependencies("local")
+```
 
+```text:Output
+Adding git submodule: mal-example-a.git - https://github.com/CiaranMcAndrew/mal-example-a.git
+Error using mal.GitDependency/fetch
+Error adding git submodule https://github.com/CiaranMcAndrew/mal-example-a.git
+
+Error in mal.ModelAssemblyInstructions>@(x)x.fetch(this.StagingDirectory) (line 121)
+            arrayfun(@(x) x.fetch(this.StagingDirectory), dependencies, 'UniformOutput', false);
+
+Error in mal.ModelAssemblyInstructions/fetchDependencies (line 121)
+            arrayfun(@(x) x.fetch(this.StagingDirectory), dependencies, 'UniformOutput', false);
 ```
