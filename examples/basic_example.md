@@ -58,24 +58,30 @@ instructions.fetchDependencies("local")
 
 ```text:Output
 Adding local git repo: mal-example-a.git - https://github.com/CiaranMcAndrew/mal-example-a.git
-Warning: error: Your local changes to the following files would be overwritten by checkout:
-	examples/basic_example.mlx
-	src/+mal/GitDependency.m
-Please commit your changes or stash them before you switch branches.
-Aborting
-
-Error using mal.GitDependency/fetch
-Error executing system command: git switch main
-
-Error in mal.ModelAssemblyInstructions>@(x)x.fetch(this.StagingDirectory) (line 121)
-            arrayfun(@(x) x.fetch(this.StagingDirectory), dependencies, 'UniformOutput', false);
-
-Error in mal.ModelAssemblyInstructions/fetchDependencies (line 121)
-            arrayfun(@(x) x.fetch(this.StagingDirectory), dependencies, 'UniformOutput', false);
+Adding local git repo: mal-example-branch - https://github.com/CiaranMcAndrew/mal-example-a.git
 ```
 
 ```matlab:Code
 crawlDirectory(instructions.StagingDirectory)
+```
+
+```text:Output
+mal-example-a.git
+-.gitattributes
+-.gitignore
+-LICENSE
+-Malexamplea.prj
+-README.md
+-mdl
+--ModelA.slx
+mal-example-branch
+-.gitattributes
+-.gitignore
+-LICENSE
+-Malexamplea.prj
+-README.md
+-mdl
+--ModelA.slx
 ```
 
 ```matlab:Code
