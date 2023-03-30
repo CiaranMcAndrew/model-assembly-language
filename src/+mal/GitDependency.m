@@ -41,16 +41,22 @@ classdef GitDependency < mal.Dependency
                 this.ExecCmd(cmd)
 
                 % Fetch
-                cmd = "git fetch";
+                cmd = "git fetch --all";
                 this.ExecCmd(cmd)
 
                 % Pull
-                % cmd = "git pull origin";
-                % this.ExecCmd(cmd)
+                cmd = "git pull origin";
+                this.ExecCmd(cmd)
+                
+                % Checkout main
+                this.ExecCmd("git checkout --merge main");
 
                 % Checkout branch
-                cmd = "git checkout " + this.Branch;
-                this.ExecCmd(cmd)
+                if this.Branch ~= "main"
+                    this.ExecCmd("git branch " + this.Branch);
+                    this.ExecCmd("git checkout " + this.Branch);
+                    
+                end
 
             catch ex
                 cd(workingDirectory)
