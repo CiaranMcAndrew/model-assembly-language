@@ -12,3 +12,8 @@ dependencies:
   name: mal-example-branch
   url: https://github.com/CiaranMcAndrew/mal-example-a.git
   branch: model-branch-a
+
+- type: git
+  name: mal-example-tag
+  url: https://github.com/CiaranMcAndrew/mal-example-a.git
+  tag: release/1.0.0

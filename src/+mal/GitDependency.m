@@ -49,8 +49,13 @@ classdef GitDependency < mal.Dependency
                 this.ExecCmd(cmd)
                 
                 % Checkout branch
-                cmd = "git checkout " + this.Branch; 
+                if isempty(this.Tag)
+                    cmd = "git checkout " + this.Branch;
+                else
+                    cmd = "git checkout tags/" + this.Tag;
+                end
                 this.ExecCmd(cmd);
+                
 
             catch ex
                 cd(workingDirectory)
