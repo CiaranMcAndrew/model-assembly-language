@@ -69,4 +69,42 @@ instructions.fetchDependencies("local")
 Adding local git repo: mal-example-a.git - https://github.com/CiaranMcAndrew/mal-example-a.git
 ```
 
-![image_0.png](basic_example_images/image_0.png)
+```matlab:Code
+crawlDirectory(instructions.StagingDirectory)
+```
+
+```text:Output
+mal-example-a.git
+-mal-example-a
+--.gitattributes
+--.gitignore
+--LICENSE
+--Malexamplea.prj
+--README.md
+--mdl
+---ModelA.slx
+submodules
+-mal-example-a.git
+```
+
+```matlab:Code
+function crawlDirectory(d, level)
+
+arguments
+    d
+    level = 0
+end
+
+for f = dir(d)'
+    if ismember(f.name, {'.','..','.git','resources'})
+        continue; 
+    end
+
+    disp("" + repmat('-', 1,level) + f.name)
+
+    if f.isdir
+        crawlDirectory(fullfile(d,f.name), level+1)
+    end
+end
+end
+```
