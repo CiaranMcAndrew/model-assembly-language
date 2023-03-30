@@ -33,4 +33,4 @@ codegen/
 .MATLABDriveTag
 
 # Git submodules
-.gitmodules
+*gitmodules

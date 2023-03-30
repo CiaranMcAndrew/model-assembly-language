@@ -5,8 +5,8 @@ classdef GitDependency < mal.Dependency
     properties
         Name
         Url
-        Branch
         Tag
+        Branch = "main"
         Commit = "latest"
         
     end
@@ -22,29 +22,39 @@ classdef GitDependency < mal.Dependency
                 stagingDirectory (1,1) string = ""
             end
             
-            disp("Adding git submodule: " + this.Name + " - " + this.Url);
-            directory = fullfile(stagingDirectory, this.Name);
+            disp("Adding local git repo: " + this.Name + " - " + this.Url);
+            directory = join([stagingDirectory, this.Name], '/');
             
-            % Remove existing submodule
-            try
-                cmd = "git rm " + directory;
-                [status, cmdout] = system(cmd);
-            end
-           
             % Delete directory
-            status = rmdir(directory);
+            rmdir(directory, 's');
+            
+            % Create new directory and cd
+            mkdir(directory);
+            workingDirectory = pwd;
+            cd(directory);
 
-            % Add submodule
-            cmd = "git submodule add " + this.Url + " " + directory;
-            [status, cmdout] = system(cmd);
-            if status ~= 0
-                error("Error adding git submodule " + this.Url);
+            % Add git repo
+            try
+                % Clone repository
+                cmd = "git clone " + this.Url;
+                this.ExecCmd(cmd)
+
+                % Fetch
+                cmd = "git fetch";
+                this.ExecCmd(cmd)
+
+                % Pull
+                cmd = "git pull origin " + this.Branch;
+                this.ExecCmd(cmd)
+
+            catch ex
+                cd(workingDirectory)
+                throw(ex);
             end
 
-            % Init submodule
-            cd(directory);
-            cd(pwd);
+            cd(workingDirectory);
         end
+
     end
 
     methods % get;set
@@ -67,6 +77,32 @@ classdef GitDependency < mal.Dependency
 
             obj = GitDependency;
             obj.assignProperties(s);
+
+        end
+    end
+
+    methods (Static, Access=private)
+        function ExecCmd(cmd, raiseError, raiseWarn, onError)
+            arguments
+                cmd string
+                raiseError logical = true
+                raiseWarn logical = true
+                onError function_handle = @nan
+            end
+
+            [status, cmdout] = system(cmd);
+            if status ~= 0
+                if raiseWarn
+                    warning(cmdout); 
+                end
+                
+                if raiseError
+                    error("Error adding git submodule: " + cmd);
+                    if onError ~= @nan
+                        feval(onError)
+                    end
+                end
+            end
 
         end
     end

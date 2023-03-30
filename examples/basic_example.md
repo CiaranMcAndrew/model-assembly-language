@@ -52,10 +52,10 @@ ans =
 instructions.getDependencyTable()
 ```
 
-| |Name|Url|Branch|Tag|Commit|Type|
+| |Name|Url|Tag|Branch|Commit|Type|
 |:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-|1|"mal-example-a.git"|"https://github.com/...|[]|[]|"latest"|"git"|
-|2|"www.facebook.com"|"www.facebook.com"|[]|"release/1.2.3"|"latest"|"git"|
+|1|"mal-example-a.git"|"https://github.com/...|[]|"main"|"latest"|"git"|
+|2|"www.facebook.com"|"www.facebook.com"|"release/1.2.3"|"main"|"latest"|"git"|
 
 ```matlab:Code
 % instructions.getDependencyTable("local")
@@ -66,13 +66,7 @@ instructions.fetchDependencies("local")
 ```
 
 ```text:Output
-Adding git submodule: mal-example-a.git - https://github.com/CiaranMcAndrew/mal-example-a.git
-Error using mal.GitDependency/fetch
-Error adding git submodule https://github.com/CiaranMcAndrew/mal-example-a.git
-
-Error in mal.ModelAssemblyInstructions>@(x)x.fetch(this.StagingDirectory) (line 121)
-            arrayfun(@(x) x.fetch(this.StagingDirectory), dependencies, 'UniformOutput', false);
-
-Error in mal.ModelAssemblyInstructions/fetchDependencies (line 121)
-            arrayfun(@(x) x.fetch(this.StagingDirectory), dependencies, 'UniformOutput', false);
+Adding local git repo: mal-example-a.git - https://github.com/CiaranMcAndrew/mal-example-a.git
 ```
+
+![image_0.png](basic_example_images/image_0.png)
