@@ -75,8 +75,6 @@ classdef GitDependency < mal.Dependency
                     end
                 end
 
-
-
             catch ex
                 cd(workingDirectory)
                 throw(ex);
