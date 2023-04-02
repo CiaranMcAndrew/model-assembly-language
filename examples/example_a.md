@@ -1,11 +1,11 @@
 ## Read the yaml file
 
 ```matlab:Code
-filename = fullfile("examples", "mal.yaml")
+filename = fullfile("examples", "example-a.yaml")
 ```
 
 ```text:Output
-filename = "examples\mal.yaml"
+filename = "examples\example-a.yaml"
 ```
 
 ```matlab:Code
@@ -21,7 +21,6 @@ instructions:
 dependencies:
 - type: git
   url: https://github.com/CiaranMcAndrew/mal-example-a.git
-  commit: latest
 
 - type: git
   name: mal-example-branch
@@ -44,7 +43,7 @@ instructions = mal.loadInstructions(filename)
 instructions = 
   ModelAssemblyInstructions with properties:
 
-            Filename: "examples\mal.yaml"
+            Filename: "examples\example-a.yaml"
     StagingDirectory: "submodules"
         Instructions: [1x1 mal.ModelAssemblyInstructions]
         Dependencies: [3x1 mal.GitDependency]
@@ -57,23 +56,24 @@ instructions =
 instructions.getDependencyTable()
 ```
 
-| |Name|Url|Tag|Branch|Commit|Type|
-|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-|1|"mal-example-a.git"|"https://github.com/...|[]|"main"|"latest"|"git"|
-|2|"mal-example-branch"|"https://github.com/...|[]|"model-branch-a"|"latest"|"git"|
-|3|"mal-example-tag"|"https://github.com/...|"release/1.0.0"|"main"|"latest"|"git"|
-|4|"www.facebook.com"|"www.facebook.com"|"release/1.2.3"|"main"|"latest"|"git"|
+| |Name|Url|Tag|Branch|Commit|Type|Instructions|
+|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+|1|"mal-example-a.git"|"https://github.com/...|[]|"main"|"latest"|"git"|0x0 mal.ModelAssembl...|
+|2|"mal-example-branch"|"https://github.com/...|[]|"model-branch-a"|"latest"|"git"|0x0 mal.ModelAssembl...|
+|3|"mal-example-tag"|"https://github.com/...|"release/1.0.0"|"main"|"latest"|"git"|0x0 mal.ModelAssembl...|
+|4|"model-subref"|"https://github.com/...|[]|"main"|"latest"|"git"|0x0 mal.ModelAssembl...|
 
 ## Fetch local depedencies
 
 ```matlab:Code
-instructions.fetchDependencies("local")
+instructions.fetchDependencies()
 ```
 
 ```text:Output
 Adding local git repo: mal-example-a.git - https://github.com/CiaranMcAndrew/mal-example-a.git
 Adding local git repo: mal-example-branch - https://github.com/CiaranMcAndrew/mal-example-a.git
 Adding local git repo: mal-example-tag - https://github.com/CiaranMcAndrew/mal-example-a.git
+Adding local git repo: model-subref - https://github.com/CiaranMcAndrew/mal-example-a.git
 ```
 
 ## Show all referenced files
@@ -91,6 +91,22 @@ mal-example-a.git
 -README.md
 -mdl
 --ModelA.slx
+mal-example-b.git
+-.gitattributes
+-.gitignore
+-LICENSE
+-README.md
+-mal-example-b.prj
+-mal.yaml
+-submodules
+--mal-example-a.git
+---.gitattributes
+---.gitignore
+---LICENSE
+---Malexamplea.prj
+---README.md
+---mdl
+----ModelA.slx
 mal-example-branch
 -.gitattributes
 -.gitignore
@@ -100,6 +116,14 @@ mal-example-branch
 -mdl
 --ModelA.slx
 mal-example-tag
+-.gitattributes
+-.gitignore
+-LICENSE
+-Malexamplea.prj
+-README.md
+-mdl
+--ModelA.slx
+model-subref
 -.gitattributes
 -.gitignore
 -LICENSE
@@ -131,6 +155,14 @@ Your branch is up to date with 'origin/main'.
 
 nothing to commit, working tree clean
 --------------------
+git status for : mal-example-b.git
+HEAD detached at refs/heads/main
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	submodules/
+
+nothing added to commit but untracked files present (use "git add" to track)
+--------------------
 git status for : mal-example-branch
 On branch model-branch-a
 Your branch is up to date with 'origin/model-branch-a'.
@@ -139,6 +171,12 @@ nothing to commit, working tree clean
 --------------------
 git status for : mal-example-tag
 HEAD detached at release/1.0.0
+nothing to commit, working tree clean
+--------------------
+git status for : model-subref
+On branch main
+Your branch is up to date with 'origin/main'.
+
 nothing to commit, working tree clean
 --------------------
 ```
