@@ -6,7 +6,6 @@ instructions:
 dependencies:
 - type: git
   url: https://github.com/CiaranMcAndrew/mal-example-a.git
-  commit: latest
 
 - type: git
   name: mal-example-branch

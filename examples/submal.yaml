@@ -1,4 +1,4 @@
 dependencies:
 - type: git
-  url: www.facebook.com
-  tag: release/1.2.3
+  url: https://github.com/CiaranMcAndrew/mal-example-a.git
+  name: model-subref
