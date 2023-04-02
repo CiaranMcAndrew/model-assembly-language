@@ -49,13 +49,19 @@ classdef GitDependency < mal.Dependency
                 this.ExecCmd(cmd)
                 
                 % Checkout branch
+                cmd = "git checkout --detach";
                 if isempty(this.Tag)
-                    cmd = "git checkout " + this.Branch;
+                    cmd = cmd + " " + this.Branch;
                 else
-                    cmd = "git checkout tags/" + this.Tag;
+                    cmd = cmd + " tags/" + this.Tag;
                 end
                 this.ExecCmd(cmd);
                 
+                % Cascade instruction sets
+                if ~isempty(this.Instructions)
+                    this.Instructions = mal.ModelAssemblyInstructions.FromYaml(this.Instructions.Filename);
+                    this.Instructions.fetchDependencies();
+                end
 
             catch ex
                 cd(workingDirectory)

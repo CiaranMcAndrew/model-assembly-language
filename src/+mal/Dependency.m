@@ -8,6 +8,7 @@ classdef Dependency < mal.SerialisableObject & matlab.mixin.Heterogeneous
 
     properties
         Type {mustBeMember(Type, ["git", "none"])} = "none"
+        Instructions mal.ModelAssemblyInstructions
     end
 
     

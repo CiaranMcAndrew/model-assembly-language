@@ -9,6 +9,10 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
         Dependencies = mal.Dependency.empty()
     end
 
+    properties (SetAccess=private, Hidden=true)
+        Initialised logical = false
+    end
+
     methods
         function this = ModelAssemblyInstructions(filename)
             % Blank constructor
@@ -46,6 +50,8 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
                     end
                 end
             end
+
+            this.Initialised = true;
         end
 
         function instructions = addInstructions(this, ins)
@@ -98,7 +104,7 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
             dependencies = this.getDependencies(scope);
 
             warning('off', 'MATLAB:structOnObject');
-            tbl = struct2table(arrayfun(@struct, dependencies));
+            tbl = struct2table(arrayfun(@struct, dependencies), "AsArray",true);
             warning('on', 'MATLAB:structOnObject');
         end
         
@@ -121,6 +127,11 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
             arrayfun(@(x) x.fetch(this.StagingDirectory), dependencies, 'UniformOutput', false);
 
 
+        end
+        
+        function dispYaml(this)
+            yml = fileread(this.Filename);
+            disp(yml);
         end
 
     end
