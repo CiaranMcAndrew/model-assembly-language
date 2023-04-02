@@ -13,7 +13,7 @@ disp(fileread(filename));
 ```
 
 ```text:Output
-stagingDirectory: submodules
+stagingDirectory: submodules/example-b
 
 dependencies:
 - type: git
@@ -32,7 +32,7 @@ instructions =
   ModelAssemblyInstructions with properties:
 
             Filename: "examples\example-b.yaml"
-    StagingDirectory: "submodules"
+    StagingDirectory: "submodules/example-b"
         Instructions: []
         Dependencies: [1x1 mal.GitDependency]
 
@@ -58,7 +58,7 @@ disp(instructions.toYaml)
 
 ```text:Output
 Filename: examples\example-b.yaml
-StagingDirectory: submodules
+StagingDirectory: submodules/example-b
 Instructions: []
 Dependencies:
   Name: mal-example-b.git
@@ -81,6 +81,7 @@ instructions.fetchInstructions
 ```
 
 ```text:Output
+Creating staging directory: submodules/example-b
 Adding local git repo: mal-example-b.git - https://github.com/CiaranMcAndrew/mal-example-b.git
 ```
 
@@ -90,7 +91,7 @@ disp(instructions.toYaml)
 
 ```text:Output
 Filename: examples\example-b.yaml
-StagingDirectory: submodules
+StagingDirectory: submodules/example-b
 Instructions: []
 Dependencies:
   Name: mal-example-b.git
@@ -113,7 +114,7 @@ Dependencies:
       Instructions: []
 ```
 
-## Fetch local depedencies
+## Fetch depedencies
 
 ```matlab:Code
 instructions.fetchDependencies()
@@ -132,21 +133,21 @@ crawlDirectory(instructions.StagingDirectory)
 ```
 
 ```text:Output
-mal-example-b.git
+mal-example-b.git\
 -.gitattributes
 -.gitignore
 -LICENSE
 -README.md
 -mal-example-b.prj
 -mal.yaml
--submodules
---mal-example-a.git
+-submodules\
+--mal-example-a.git\
 ---.gitattributes
 ---.gitignore
 ---LICENSE
 ---Malexamplea.prj
 ---README.md
----mdl
+---mdl\
 ----ModelA.slx
 ```
 
@@ -176,26 +177,4 @@ Untracked files:
 
 nothing added to commit but untracked files present (use "git add" to track)
 --------------------
-```
-
-```matlab:Code
-function crawlDirectory(d, level)
-
-arguments
-    d
-    level = 0
-end
-
-for f = dir(d)'
-    if ismember(f.name, {'.','..','.git','resources'})
-        continue; 
-    end
-
-    disp("" + repmat('-', 1,level) + f.name)
-
-    if f.isdir
-        crawlDirectory(fullfile(d,f.name), level+1)
-    end
-end
-end
 ```

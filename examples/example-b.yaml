@@ -1,4 +1,4 @@
-stagingDirectory: submodules
+stagingDirectory: submodules/example-b
 
 dependencies:
 - type: git

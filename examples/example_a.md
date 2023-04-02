@@ -13,7 +13,7 @@ disp(fileread(filename));
 ```
 
 ```text:Output
-stagingDirectory: submodules
+stagingDirectory: submodules/example-a
 
 instructions:
 - path: examples/submal.yaml
@@ -44,7 +44,7 @@ instructions =
   ModelAssemblyInstructions with properties:
 
             Filename: "examples\example-a.yaml"
-    StagingDirectory: "submodules"
+    StagingDirectory: "submodules/example-a"
         Instructions: [1x1 mal.ModelAssemblyInstructions]
         Dependencies: [3x1 mal.GitDependency]
 
@@ -70,6 +70,7 @@ instructions.fetchDependencies()
 ```
 
 ```text:Output
+Creating staging directory: submodules/example-a
 Adding local git repo: mal-example-a.git - https://github.com/CiaranMcAndrew/mal-example-a.git
 Adding local git repo: mal-example-branch - https://github.com/CiaranMcAndrew/mal-example-a.git
 Adding local git repo: mal-example-tag - https://github.com/CiaranMcAndrew/mal-example-a.git
@@ -83,53 +84,37 @@ crawlDirectory(instructions.StagingDirectory)
 ```
 
 ```text:Output
-mal-example-a.git
+mal-example-a.git\
 -.gitattributes
 -.gitignore
 -LICENSE
 -Malexamplea.prj
 -README.md
--mdl
+-mdl\
 --ModelA.slx
-mal-example-b.git
--.gitattributes
--.gitignore
--LICENSE
--README.md
--mal-example-b.prj
--mal.yaml
--submodules
---mal-example-a.git
----.gitattributes
----.gitignore
----LICENSE
----Malexamplea.prj
----README.md
----mdl
-----ModelA.slx
-mal-example-branch
+mal-example-branch\
 -.gitattributes
 -.gitignore
 -LICENSE
 -Malexamplea.prj
 -README.md
--mdl
+-mdl\
 --ModelA.slx
-mal-example-tag
+mal-example-tag\
 -.gitattributes
 -.gitignore
 -LICENSE
 -Malexamplea.prj
 -README.md
--mdl
+-mdl\
 --ModelA.slx
-model-subref
+model-subref\
 -.gitattributes
 -.gitignore
 -LICENSE
 -Malexamplea.prj
 -README.md
--mdl
+-mdl\
 --ModelA.slx
 ```
 
@@ -155,14 +140,6 @@ Your branch is up to date with 'origin/main'.
 
 nothing to commit, working tree clean
 --------------------
-git status for : mal-example-b.git
-HEAD detached at refs/heads/main
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	submodules/
-
-nothing added to commit but untracked files present (use "git add" to track)
---------------------
 git status for : mal-example-branch
 On branch model-branch-a
 Your branch is up to date with 'origin/model-branch-a'.
@@ -179,26 +156,4 @@ Your branch is up to date with 'origin/main'.
 
 nothing to commit, working tree clean
 --------------------
-```
-
-```matlab:Code
-function crawlDirectory(d, level)
-
-arguments
-    d
-    level = 0
-end
-
-for f = dir(d)'
-    if ismember(f.name, {'.','..','.git','resources'})
-        continue; 
-    end
-
-    disp("" + repmat('-', 1,level) + f.name)
-
-    if f.isdir
-        crawlDirectory(fullfile(d,f.name), level+1)
-    end
-end
-end
 ```

@@ -1,4 +1,4 @@
-stagingDirectory: submodules
+stagingDirectory: submodules/example-a
 
 instructions:
 - path: examples/submal.yaml
