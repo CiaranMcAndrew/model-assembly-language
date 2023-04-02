@@ -16,10 +16,12 @@ classdef GitDependency < mal.Dependency
             this.Type = "git";
         end
 
-        function fetch(this, stagingDirectory)
+        function fetch(this, stagingDirectory, pathspec, scope)
             arguments
                 this
                 stagingDirectory (1,1) string = ""
+                pathspec (1,1) string = ""
+                scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "all"
             end
             
             disp("Adding local git repo: " + this.Name + " - " + this.Url);
@@ -27,7 +29,7 @@ classdef GitDependency < mal.Dependency
             
             % Delete directory
             status = rmdir(directory, 's');
-            assert(~isdir(directory));
+            assert(~isfolder(directory));
             
             % Create new directory and cd
             mkdir(directory);
@@ -37,7 +39,7 @@ classdef GitDependency < mal.Dependency
             % Add git repo
             try
                 % Clone repository
-                cmd = "git clone " + this.Url + " .";
+                cmd = "git clone -n " + this.Url + " .";
                 this.ExecCmd(cmd)
 
                 % Fetch
@@ -55,12 +57,20 @@ classdef GitDependency < mal.Dependency
                 else
                     cmd = cmd + "tags/" + this.Tag;
                 end
+                
+                if ~isempty(pathspec)
+                    cmd = cmd + " -- " + pathspec;
+                end
+
                 this.ExecCmd(cmd);
                 
-                % Cascade instruction sets
-                if ~isempty(this.Instructions)
-                    this.Instructions = mal.ModelAssemblyInstructions.FromYaml(this.Instructions.Filename);
-                    this.Instructions.fetchDependencies();
+                switch scope 
+                    case "all"
+                        % Cascade instruction sets
+                        if ~isempty(this.Instructions)
+                            this.Instructions = mal.ModelAssemblyInstructions.FromYaml(this.Instructions.Filename);
+                            this.Instructions.fetchDependencies();
+                        end
                 end
 
             catch ex
@@ -71,6 +81,17 @@ classdef GitDependency < mal.Dependency
             cd(workingDirectory);
         end
 
+        function fetchInstructions(this, stagingDirectory)
+            arguments
+                this
+                stagingDirectory (1,1) string = ""
+            end
+            
+            if isempty(this.Instructions); return; end
+
+            this.fetch(stagingDirectory, this.Instructions.Filename, "local")
+            this.Instructions.fetchInstructions();
+        end
     end
 
     methods % get;set

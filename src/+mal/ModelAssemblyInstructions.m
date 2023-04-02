@@ -103,9 +103,9 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
 
             dependencies = this.getDependencies(scope);
 
-            warning('off', 'MATLAB:structOnObject');
-            tbl = struct2table(arrayfun(@struct, dependencies), "AsArray",true);
-            warning('on', 'MATLAB:structOnObject');
+            % warning('off', 'MATLAB:structOnObject');
+            tbl = struct2table(arrayfun(@toStruct, dependencies), "AsArray",true);
+            % warning('on', 'MATLAB:structOnObject');
         end
         
         function fetchDependencies(this, scope)
@@ -129,11 +129,30 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
 
         end
         
+        function fetchInstructions(this)
+
+            dependencies = this.getDependencies("all");
+
+            % Look for staging directory and create if necessary
+            if ~isfolder(this.StagingDirectory)
+                disp("Creating staging directory: " + this.StagingDirectory);
+                mkdir(this.StagingDirectory)
+            end
+
+            % Fetch each dependency
+            % dependencies.fetch()
+            arrayfun(@(x) x.fetchInstructions(this.StagingDirectory), dependencies, 'UniformOutput', false);
+
+        end
+
         function dispYaml(this)
             yml = fileread(this.Filename);
             disp(yml);
         end
 
+        function str = toYaml(this)
+            str = yaml.dump(this.toStruct);
+        end
     end
 
     methods (Static)
