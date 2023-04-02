@@ -96,6 +96,17 @@ classdef GitDependency < mal.Dependency
             this.fetch(stagingDirectory, this.Instructions.Filename, "local")
             this.Instructions.fetchInstructions();
         end
+
+        function applyValues(this, s)
+            if any(strcmpi(fieldnames(this), s.name))
+                this.assignProperties(struct(s.name, s.value));
+                return
+            end
+
+            obj = findobj(this.Instructions.Dependencies, "Name", s.name);
+            obj.applyValues(cell2mat(s.value));
+
+        end
     end
 
     methods % get;set

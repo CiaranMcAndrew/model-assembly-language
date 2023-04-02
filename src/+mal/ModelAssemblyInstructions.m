@@ -7,6 +7,7 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
         StagingDirectory (1,1) string = "subs"
         Instructions = [];
         Dependencies = mal.Dependency.empty()
+        Values
     end
 
     properties (SetAccess=private, Hidden=true)
@@ -143,6 +144,18 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
             % dependencies.fetch()
             arrayfun(@(x) x.fetchInstructions(this.StagingDirectory), dependencies, 'UniformOutput', false);
 
+        end
+
+        function applyValues(this)
+
+            if isempty(this.Values); return; end
+            for v = cell2mat(this.Values)
+                d = findobj(this.Dependencies, "Name", v.name);
+                if isempty(d); continue; end
+
+                d.applyValues(cell2mat(v.value));
+
+            end
         end
 
         function dispYaml(this)
