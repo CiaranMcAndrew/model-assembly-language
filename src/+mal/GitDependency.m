@@ -1,16 +1,16 @@
 classdef GitDependency < mal.Dependency
     %GITDEPENDENCY Summary of this class goes here
     %   Detailed explanation goes here
-    
+
     properties
         Name
         Url
         Tag
         Branch = "main"
         Commit = "latest"
-        
+
     end
-    
+
     methods
         function this = GitDependency()
             this.Type = "git";
@@ -23,14 +23,14 @@ classdef GitDependency < mal.Dependency
                 pathspec (1,1) string = ""
                 scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "all"
             end
-            
+
             disp("Adding local git repo: " + this.Name + " - " + this.Url);
             directory = join([stagingDirectory, this.Name], '/');
-            
+
             % Delete directory
             status = rmdir(directory, 's');
             assert(~isfolder(directory));
-            
+
             % Create new directory and cd
             mkdir(directory);
             workingDirectory = pwd;
@@ -49,7 +49,7 @@ classdef GitDependency < mal.Dependency
                 % Pull
                 cmd = "git pull origin";
                 this.ExecCmd(cmd)
-                
+
                 % Checkout branch
                 cmd = "git checkout ";
                 if isempty(this.Tag)
@@ -57,21 +57,25 @@ classdef GitDependency < mal.Dependency
                 else
                     cmd = cmd + "tags/" + this.Tag;
                 end
-                
+
                 if ~isempty(pathspec)
                     cmd = cmd + " -- " + pathspec;
                 end
 
                 this.ExecCmd(cmd);
-                
-                switch scope 
-                    case "all"
-                        % Cascade instruction sets
-                        if ~isempty(this.Instructions)
-                            this.Instructions = mal.ModelAssemblyInstructions.FromYaml(this.Instructions.Filename);
+
+                % Update Instructions
+                if ~isempty(this.Instructions)
+                    this.Instructions = mal.ModelAssemblyInstructions.FromYaml(this.Instructions.Filename);
+
+                    % Cascade instruction sets
+                    switch scope
+                        case "all"
                             this.Instructions.fetchDependencies();
-                        end
+                    end
                 end
+
+
 
             catch ex
                 cd(workingDirectory)
@@ -86,7 +90,7 @@ classdef GitDependency < mal.Dependency
                 this
                 stagingDirectory (1,1) string = ""
             end
-            
+
             if isempty(this.Instructions); return; end
 
             this.fetch(stagingDirectory, this.Instructions.Filename, "local")
@@ -107,7 +111,7 @@ classdef GitDependency < mal.Dependency
     methods (Static)
         function obj = FromStruct(s)
             arguments
-               s {mustBeA(s, ["cell", "struct"])}
+                s {mustBeA(s, ["cell", "struct"])}
             end
 
             import mal.*
@@ -130,9 +134,9 @@ classdef GitDependency < mal.Dependency
             [status, cmdout] = system(cmd);
             if status ~= 0
                 if raiseWarn
-                    warning(cmdout); 
+                    warning(cmdout);
                 end
-                
+
                 if raiseError
                     error("Error executing system command: " + cmd);
                     if onError ~= @nan
