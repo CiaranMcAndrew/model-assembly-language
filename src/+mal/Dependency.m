@@ -21,6 +21,7 @@ classdef Dependency < mal.SerialisableObject & matlab.mixin.Heterogeneous
 
     methods (Abstract)
         fetch(this)
+        fetchInstructions(this)
     end
 
     methods (Static)

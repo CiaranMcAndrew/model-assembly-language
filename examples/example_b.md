@@ -81,7 +81,6 @@ instructions.fetchInstructions
 ```
 
 ```text:Output
-Creating staging directory: submodules/example-b
 Adding local git repo: mal-example-b.git - https://github.com/CiaranMcAndrew/mal-example-b.git
 ```
 

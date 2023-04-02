@@ -140,7 +140,7 @@ classdef GitDependency < mal.Dependency
                 if raiseError
                     error("Error executing system command: " + cmd);
                     if onError ~= @nan
-                        feval(onError)
+                        onError()
                     end
                 end
             end

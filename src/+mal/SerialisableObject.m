@@ -16,12 +16,12 @@ classdef (Abstract) SerialisableObject < handle & matlab.mixin.SetGet
             end
 
         end
-
+        
         function s = toStruct(this)
             warning('off', 'MATLAB:structOnObject');
             s = struct(this);
             warning('on', 'MATLAB:structOnObject');
-            
+
             mco = metaclass(this);
 
             for fn = fieldnames(s)'
@@ -47,5 +47,6 @@ classdef (Abstract) SerialisableObject < handle & matlab.mixin.SetGet
             
         end
     end
+
 end
 
