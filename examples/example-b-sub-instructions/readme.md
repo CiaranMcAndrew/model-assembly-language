@@ -1,5 +1,7 @@
 # Example B - Using Sub Instructions
-## Read the yaml file
+## Instruction set
+
+Example B instructions contains a dependency with reference to another instruction set, this time contained in the dependency repo.
 
 ```matlab:Code
 filename = fullfile("examples", "example-b-sub-instructions", "example-b.yaml")
@@ -22,7 +24,7 @@ dependencies:
   instructions: mal.yaml
 ```
 
-## Create an instruction set
+## Load the Instruction set and preview
 
 ```matlab:Code
 instructions = mal.loadInstructions(filename)
@@ -39,18 +41,6 @@ instructions =
               Values: []
 
 ```
-
-## View dependencies in a table
-
-```matlab:Code
-instructions.getDependencyTable()
-```
-
-| |Name|Url|Tag|Branch|Commit|Type|Instructions|
-|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-|1|"mal-example-b.git"|"https://github.com/...|[]|"main"|"latest"|"git"|1x1 struct|
-
-## Preview instructions
 
 At this stage, we only know of first order instructions, as show here:
 
@@ -77,6 +67,8 @@ Dependencies:
     Values: []
 Values: []
 ```
+
+## `Fetch Instructions to populate the hierarchy`
 
 `fetchInstructions` will perform a recursive sparse checkout on the instruction hierachy to build the complete instruction set. This is useful for validating the instruction set before execution a full `fetchDependencies` command.
 
@@ -119,6 +111,10 @@ Dependencies:
 Values: []
 ```
 
+Note that the 2nd tier instructions have now been populated.
+
+We can now run a `fetchDependencies `command to get all dependencies in the hierarchy.
+
 ## Fetch depedencies
 
 ```matlab:Code
@@ -131,7 +127,7 @@ Creating staging directory: submodules
 Adding local git repo: mal-example-a.git - https://github.com/CiaranMcAndrew/mal-example-a.git
 ```
 
-## Show all referenced files
+## Show all staged files
 
 ```matlab:Code
 crawlDirectory(instructions.StagingDirectory)

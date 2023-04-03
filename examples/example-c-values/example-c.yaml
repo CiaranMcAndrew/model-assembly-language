@@ -1,9 +1,7 @@
 stagingDirectory: submodules/example-c
 
-dependencies:
-- type: git
-  url: https://github.com/CiaranMcAndrew/mal-example-b.git
-  instructions: mal.yaml
+instructions:
+- path: examples/example-b-sub-instructions/example-b.yaml
 
 values:
 - name: mal-example-b.git

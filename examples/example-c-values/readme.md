@@ -1,5 +1,10 @@
 # Example C - Using Values to Configure Dependencies
-## Read the yaml file
+## Instruction set
+
+Example C instructions extend those from Example B with the following additions:
+
+   1.  The `instructions` attribute to reference another instruction set. 
+   1.  The `values `attribute overwrite configuration within an instruction hierarchy. 
 
 ```matlab:Code
 filename = fullfile("examples", "example-c-values", "example-c.yaml")
@@ -16,10 +21,8 @@ disp(fileread(filename));
 ```text:Output
 stagingDirectory: submodules/example-c
 
-dependencies:
-- type: git
-  url: https://github.com/CiaranMcAndrew/mal-example-b.git
-  instructions: mal.yaml
+instructions:
+- path: examples/example-b-sub-instructions/example-b.yaml
 
 values:
 - name: mal-example-b.git
@@ -30,7 +33,7 @@ values:
       value: release/1.0.0
 ```
 
-## Create an instruction set
+## Load the Instruction set and preview
 
 ```matlab:Code
 instructions = mal.loadInstructions(filename)
@@ -42,56 +45,11 @@ instructions =
 
             Filename: "examples\example-c-values\example-c.yaml"
     StagingDirectory: "submodules/example-c"
-        Instructions: []
-        Dependencies: [1x1 mal.GitDependency]
+        Instructions: [1x1 mal.ModelAssemblyInstructions]
+        Dependencies: [0x0 mal.Dependency]
               Values: {[1x1 struct]}
 
 ```
-
-## View dependencies in a table
-
-```matlab:Code
-instructions.getDependencyTable()
-```
-
-| |Name|Url|Tag|Branch|Commit|Type|Instructions|
-|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-|1|"mal-example-b.git"|"https://github.com/...|[]|"main"|"latest"|"git"|1x1 struct|
-
-## Preview instructions
-
-At this stage, we only know of first order instructions, as show here:
-
-```matlab:Code
-disp(instructions.toYaml)
-```
-
-```text:Output
-Filename: examples\example-c-values\example-c.yaml
-StagingDirectory: submodules/example-c
-Instructions: []
-Dependencies:
-  Name: mal-example-b.git
-  Url: https://github.com/CiaranMcAndrew/mal-example-b.git
-  Tag: []
-  Branch: main
-  Commit: latest
-  Type: git
-  Instructions:
-    Filename: mal.yaml
-    StagingDirectory: subs
-    Instructions: []
-    Dependencies: []
-    Values: []
-Values:
-- name: mal-example-b.git
-  value:
-  - name: mal-example-a.git
-    value:
-    - {name: tag, value: release/1.0.0}
-```
-
-`fetchInstructions` will perform a recursive sparse checkout on the instruction hierachy to build the complete instruction set. This is useful for validating the instruction set before execution a full `fetchDependencies` command.
 
 ```matlab:Code
 instructions.fetchInstructions
@@ -108,27 +66,32 @@ disp(instructions.toYaml)
 ```text:Output
 Filename: examples\example-c-values\example-c.yaml
 StagingDirectory: submodules/example-c
-Instructions: []
-Dependencies:
-  Name: mal-example-b.git
-  Url: https://github.com/CiaranMcAndrew/mal-example-b.git
-  Tag: []
-  Branch: main
-  Commit: latest
-  Type: git
-  Instructions:
-    Filename: mal.yaml
-    StagingDirectory: submodules
-    Instructions: []
-    Dependencies:
-      Name: mal-example-a.git
-      Url: https://github.com/CiaranMcAndrew/mal-example-a.git
-      Tag: []
-      Branch: main
-      Commit: latest
-      Type: git
+Instructions:
+  Filename: examples/example-b-sub-instructions/example-b.yaml
+  StagingDirectory: submodules/example-b
+  Instructions: []
+  Dependencies:
+    Name: mal-example-b.git
+    Url: https://github.com/CiaranMcAndrew/mal-example-b.git
+    Tag: []
+    Branch: main
+    Commit: latest
+    Type: git
+    Instructions:
+      Filename: mal.yaml
+      StagingDirectory: submodules
       Instructions: []
-    Values: []
+      Dependencies:
+        Name: mal-example-a.git
+        Url: https://github.com/CiaranMcAndrew/mal-example-a.git
+        Tag: []
+        Branch: main
+        Commit: latest
+        Type: git
+        Instructions: []
+      Values: []
+  Values: []
+Dependencies: []
 Values:
 - name: mal-example-b.git
   value:
@@ -136,6 +99,8 @@ Values:
     value:
     - {name: tag, value: release/1.0.0}
 ```
+
+`fetchInstructions` has built the full instruction hierarchy. By calling `applyValues` we can overwrite these instructions with a specfic configuration.
 
 ```matlab:Code
 instructions.applyValues
@@ -145,27 +110,32 @@ disp(instructions.toYaml)
 ```text:Output
 Filename: examples\example-c-values\example-c.yaml
 StagingDirectory: submodules/example-c
-Instructions: []
-Dependencies:
-  Name: mal-example-b.git
-  Url: https://github.com/CiaranMcAndrew/mal-example-b.git
-  Tag: []
-  Branch: main
-  Commit: latest
-  Type: git
-  Instructions:
-    Filename: mal.yaml
-    StagingDirectory: submodules
-    Instructions: []
-    Dependencies:
-      Name: mal-example-a.git
-      Url: https://github.com/CiaranMcAndrew/mal-example-a.git
-      Tag: release/1.0.0
-      Branch: main
-      Commit: latest
-      Type: git
+Instructions:
+  Filename: examples/example-b-sub-instructions/example-b.yaml
+  StagingDirectory: submodules/example-b
+  Instructions: []
+  Dependencies:
+    Name: mal-example-b.git
+    Url: https://github.com/CiaranMcAndrew/mal-example-b.git
+    Tag: []
+    Branch: main
+    Commit: latest
+    Type: git
+    Instructions:
+      Filename: mal.yaml
+      StagingDirectory: submodules
       Instructions: []
-    Values: []
+      Dependencies:
+        Name: mal-example-a.git
+        Url: https://github.com/CiaranMcAndrew/mal-example-a.git
+        Tag: []
+        Branch: main
+        Commit: latest
+        Type: git
+        Instructions: []
+      Values: []
+  Values: []
+Dependencies: []
 Values:
 - name: mal-example-b.git
   value:
@@ -186,7 +156,7 @@ Creating staging directory: submodules
 Adding local git repo: mal-example-a.git - https://github.com/CiaranMcAndrew/mal-example-a.git
 ```
 
-## Show all referenced files
+## Show all staged files
 
 ```matlab:Code
 crawlDirectory(instructions.StagingDirectory)

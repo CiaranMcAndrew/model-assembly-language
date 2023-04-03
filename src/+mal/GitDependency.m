@@ -62,6 +62,8 @@ classdef GitDependency < mal.Dependency
 
                 if ~isempty(pathspec)
                     cmd = cmd + " -- " + pathspec;
+                else
+                    disp("Executing git cmd: " + cmd)
                 end
 
                 this.ExecCmd(cmd);
