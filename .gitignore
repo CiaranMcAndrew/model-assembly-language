@@ -35,3 +35,5 @@ codegen/
 # Git submodules
 *gitmodules
 submodules/
+
+*.sty

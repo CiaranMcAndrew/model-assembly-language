@@ -1,11 +1,12 @@
+# Example C - Using Values to Configure Dependencies
 ## Read the yaml file
 
 ```matlab:Code
-filename = fullfile("examples", "example-b.yaml")
+filename = fullfile("examples", "example-c-values", "example-c.yaml")
 ```
 
 ```text:Output
-filename = "examples\example-b.yaml"
+filename = "examples\example-c-values\example-c.yaml"
 ```
 
 ```matlab:Code
@@ -13,12 +14,20 @@ disp(fileread(filename));
 ```
 
 ```text:Output
-stagingDirectory: submodules/example-b
+stagingDirectory: submodules/example-c
 
 dependencies:
 - type: git
   url: https://github.com/CiaranMcAndrew/mal-example-b.git
   instructions: mal.yaml
+
+values:
+- name: mal-example-b.git
+  value: 
+  - name: mal-example-a.git
+    value: 
+    - name: tag
+      value: release/1.0.0
 ```
 
 ## Create an instruction set
@@ -31,10 +40,11 @@ instructions = mal.loadInstructions(filename)
 instructions = 
   ModelAssemblyInstructions with properties:
 
-            Filename: "examples\example-b.yaml"
-    StagingDirectory: "submodules/example-b"
+            Filename: "examples\example-c-values\example-c.yaml"
+    StagingDirectory: "submodules/example-c"
         Instructions: []
         Dependencies: [1x1 mal.GitDependency]
+              Values: {[1x1 struct]}
 
 ```
 
@@ -57,8 +67,8 @@ disp(instructions.toYaml)
 ```
 
 ```text:Output
-Filename: examples\example-b.yaml
-StagingDirectory: submodules/example-b
+Filename: examples\example-c-values\example-c.yaml
+StagingDirectory: submodules/example-c
 Instructions: []
 Dependencies:
   Name: mal-example-b.git
@@ -72,6 +82,13 @@ Dependencies:
     StagingDirectory: subs
     Instructions: []
     Dependencies: []
+    Values: []
+Values:
+- name: mal-example-b.git
+  value:
+  - name: mal-example-a.git
+    value:
+    - {name: tag, value: release/1.0.0}
 ```
 
 `fetchInstructions` will perform a recursive sparse checkout on the instruction hierachy to build the complete instruction set. This is useful for validating the instruction set before execution a full `fetchDependencies` command.
@@ -89,8 +106,8 @@ disp(instructions.toYaml)
 ```
 
 ```text:Output
-Filename: examples\example-b.yaml
-StagingDirectory: submodules/example-b
+Filename: examples\example-c-values\example-c.yaml
+StagingDirectory: submodules/example-c
 Instructions: []
 Dependencies:
   Name: mal-example-b.git
@@ -111,6 +128,50 @@ Dependencies:
       Commit: latest
       Type: git
       Instructions: []
+    Values: []
+Values:
+- name: mal-example-b.git
+  value:
+  - name: mal-example-a.git
+    value:
+    - {name: tag, value: release/1.0.0}
+```
+
+```matlab:Code
+instructions.applyValues
+disp(instructions.toYaml)
+```
+
+```text:Output
+Filename: examples\example-c-values\example-c.yaml
+StagingDirectory: submodules/example-c
+Instructions: []
+Dependencies:
+  Name: mal-example-b.git
+  Url: https://github.com/CiaranMcAndrew/mal-example-b.git
+  Tag: []
+  Branch: main
+  Commit: latest
+  Type: git
+  Instructions:
+    Filename: mal.yaml
+    StagingDirectory: submodules
+    Instructions: []
+    Dependencies:
+      Name: mal-example-a.git
+      Url: https://github.com/CiaranMcAndrew/mal-example-a.git
+      Tag: release/1.0.0
+      Branch: main
+      Commit: latest
+      Type: git
+      Instructions: []
+    Values: []
+Values:
+- name: mal-example-b.git
+  value:
+  - name: mal-example-a.git
+    value:
+    - {name: tag, value: release/1.0.0}
 ```
 
 ## Fetch depedencies
@@ -148,32 +209,4 @@ mal-example-b.git\
 ---README.md
 ---mdl\
 ----ModelA.slx
-```
-
-## Confirm git status of references
-
-```matlab:Code
-wd = pwd;
-for f = dir(instructions.StagingDirectory)'
-    if ismember(f.name, {'.','..'}); continue; end
-    
-    disp("git status for : " + f.name)
-    cd(fullfile(instructions.StagingDirectory, f.name))
-    !git status
-    cd(wd)
-    disp("--------------------")
-end
-```
-
-```text:Output
-git status for : mal-example-b.git
-On branch main
-Your branch is up to date with 'origin/main'.
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	submodules/
-
-nothing added to commit but untracked files present (use "git add" to track)
---------------------
 ```

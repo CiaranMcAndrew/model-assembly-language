@@ -50,10 +50,12 @@ classdef GitDependency < mal.Dependency
                 cmd = "git pull origin";
                 this.ExecCmd(cmd)
 
-                % Checkout branch
+                % Checkout Tag, Commit, or Branch
                 cmd = "git checkout ";
                 if isempty(this.Tag)
                     cmd = cmd + this.Branch;
+                elseif this.Commit ~= "latest"
+                    cmd = cmd + this.Commit;
                 else
                     cmd = cmd + "tags/" + this.Tag;
                 end

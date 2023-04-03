@@ -1,12 +1,12 @@
-# Using values to set configuration in dependencies
+# Example B - Using Sub Instructions
 ## Read the yaml file
 
 ```matlab:Code
-filename = fullfile("examples", "example-c.yaml")
+filename = fullfile("examples", "example-b-sub-instructions", "example-b.yaml")
 ```
 
 ```text:Output
-filename = "examples\example-c.yaml"
+filename = "examples\example-b-sub-instructions\example-b.yaml"
 ```
 
 ```matlab:Code
@@ -14,20 +14,12 @@ disp(fileread(filename));
 ```
 
 ```text:Output
-stagingDirectory: submodules/example-c
+stagingDirectory: submodules/example-b
 
 dependencies:
 - type: git
   url: https://github.com/CiaranMcAndrew/mal-example-b.git
   instructions: mal.yaml
-
-values:
-- name: mal-example-b.git
-  value: 
-  - name: mal-example-a.git
-    value: 
-    - name: tag
-      value: release/1.0.0
 ```
 
 ## Create an instruction set
@@ -40,11 +32,11 @@ instructions = mal.loadInstructions(filename)
 instructions = 
   ModelAssemblyInstructions with properties:
 
-            Filename: "examples\example-c.yaml"
-    StagingDirectory: "submodules/example-c"
+            Filename: "examples\example-b-sub-instructions\example-b.yaml"
+    StagingDirectory: "submodules/example-b"
         Instructions: []
         Dependencies: [1x1 mal.GitDependency]
-              Values: {[1x1 struct]}
+              Values: []
 
 ```
 
@@ -67,8 +59,8 @@ disp(instructions.toYaml)
 ```
 
 ```text:Output
-Filename: examples\example-c.yaml
-StagingDirectory: submodules/example-c
+Filename: examples\example-b-sub-instructions\example-b.yaml
+StagingDirectory: submodules/example-b
 Instructions: []
 Dependencies:
   Name: mal-example-b.git
@@ -83,12 +75,7 @@ Dependencies:
     Instructions: []
     Dependencies: []
     Values: []
-Values:
-- name: mal-example-b.git
-  value:
-  - name: mal-example-a.git
-    value:
-    - {name: tag, value: release/1.0.0}
+Values: []
 ```
 
 `fetchInstructions` will perform a recursive sparse checkout on the instruction hierachy to build the complete instruction set. This is useful for validating the instruction set before execution a full `fetchDependencies` command.
@@ -106,8 +93,8 @@ disp(instructions.toYaml)
 ```
 
 ```text:Output
-Filename: examples\example-c.yaml
-StagingDirectory: submodules/example-c
+Filename: examples\example-b-sub-instructions\example-b.yaml
+StagingDirectory: submodules/example-b
 Instructions: []
 Dependencies:
   Name: mal-example-b.git
@@ -129,49 +116,7 @@ Dependencies:
       Type: git
       Instructions: []
     Values: []
-Values:
-- name: mal-example-b.git
-  value:
-  - name: mal-example-a.git
-    value:
-    - {name: tag, value: release/1.0.0}
-```
-
-```matlab:Code
-instructions.applyValues
-disp(instructions.toYaml)
-```
-
-```text:Output
-Filename: examples\example-c.yaml
-StagingDirectory: submodules/example-c
-Instructions: []
-Dependencies:
-  Name: mal-example-b.git
-  Url: https://github.com/CiaranMcAndrew/mal-example-b.git
-  Tag: []
-  Branch: main
-  Commit: latest
-  Type: git
-  Instructions:
-    Filename: mal.yaml
-    StagingDirectory: submodules
-    Instructions: []
-    Dependencies:
-      Name: mal-example-a.git
-      Url: https://github.com/CiaranMcAndrew/mal-example-a.git
-      Tag: release/1.0.0
-      Branch: main
-      Commit: latest
-      Type: git
-      Instructions: []
-    Values: []
-Values:
-- name: mal-example-b.git
-  value:
-  - name: mal-example-a.git
-    value:
-    - {name: tag, value: release/1.0.0}
+Values: []
 ```
 
 ## Fetch depedencies
@@ -209,4 +154,14 @@ mal-example-b.git\
 ---README.md
 ---mdl\
 ----ModelA.slx
+git status for : mal-example-b.git
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	submodules/
+
+nothing added to commit but untracked files present (use "git add" to track)
+--------------------
 ```

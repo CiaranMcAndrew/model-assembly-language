@@ -1,11 +1,12 @@
+# Example A - Writing Instructions
 ## Read the yaml file
 
 ```matlab:Code
-filename = fullfile("examples", "example-a.yaml")
+filename = fullfile("examples", "example-a-basic-usage", "example-a.yaml")
 ```
 
 ```text:Output
-filename = "examples\example-a.yaml"
+filename = "examples\example-a-basic-usage\example-a.yaml"
 ```
 
 ```matlab:Code
@@ -43,10 +44,11 @@ instructions = mal.loadInstructions(filename)
 instructions = 
   ModelAssemblyInstructions with properties:
 
-            Filename: "examples\example-a.yaml"
+            Filename: "examples\example-a-basic-usage\example-a.yaml"
     StagingDirectory: "submodules/example-a"
         Instructions: [1x1 mal.ModelAssemblyInstructions]
         Dependencies: [3x1 mal.GitDependency]
+              Values: []
 
 ```
 
@@ -70,7 +72,6 @@ instructions.fetchDependencies()
 ```
 
 ```text:Output
-Creating staging directory: submodules/example-a
 Adding local git repo: mal-example-a.git - https://github.com/CiaranMcAndrew/mal-example-a.git
 Adding local git repo: mal-example-branch - https://github.com/CiaranMcAndrew/mal-example-a.git
 Adding local git repo: mal-example-tag - https://github.com/CiaranMcAndrew/mal-example-a.git
