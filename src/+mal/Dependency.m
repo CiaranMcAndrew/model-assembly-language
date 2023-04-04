@@ -41,7 +41,9 @@ classdef Dependency < mal.SerialisableObject & matlab.mixin.Heterogeneous
                     switch s.type
                         case "git"
                             obj = GitDependency();
-                        
+                       
+                        otherwise
+                            error("Unrecognised dependency type: " + s.type);
                     end
 
                     obj.assignProperties(s)
