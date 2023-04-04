@@ -128,7 +128,7 @@ Instructions:
       Dependencies:
         Name: mal-example-a.git
         Url: https://github.com/CiaranMcAndrew/mal-example-a.git
-        Tag: []
+        Tag: release/1.0.0
         Branch: main
         Commit: latest
         Type: git
