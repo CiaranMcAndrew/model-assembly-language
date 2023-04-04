@@ -17,11 +17,17 @@
 
 ## What Problem does this Solve?
 
-* Complex systems require complex models.
-* Complex models frequently require complex organisations.
-* Integrating model hierarchies is challenging. 
-* Balancing rigour and flexibility requires compromise.
-* Git submodules can be obscure and difficult.
+Complex systems require complex models.
+
+Imagine this scenario:
+
+* Global automotive company Fred are designing a new model of their popular Mondo family saloon.
+* A complex organisation are working on a range of models across the entire product hierarchy. Each team have their own Git repository containing their model files.
+* The Vehicle Integration Team need to take models from several teams and build and test a full model of the Mondo.
+* The Electric Battery Supercoolant Pump team have just developed a new design. The business wants to quickly evaluate its performance in a Vehicle Integration level simulation. 
+* However, the pump component is abstracted by several layers of product hierarchy from the Vehicle Integration level, and integrating these changes would create work at each of these layers, and cause a configuration control challenge as the pump is still on a model branch and has not been fully tested or reviewed.
+
+The Model Assembly Language attempts to support large-scale modelling teams (or teams of teams) with challenges similar to this. It provides a simple, flexible and human-readable alternative to methods such as Git submodules for integrating many model dependencies of various baselines, whilst allowing appropriate rigour as the assembly instructions are plain-text and can be managed in configuration control.
 
 
 ## What does this do?
@@ -54,6 +60,8 @@ Then, fetch your dependencies using the following:
 ```matlab
 mal.fetchInstructionSet("mal.yaml")
 ```
+
+The dependencies will then be checked-out into the `submodules/<dependencyName>` folder.
 
 ## Detailed Guide
 
