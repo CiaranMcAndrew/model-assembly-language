@@ -149,8 +149,10 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
         function applyValues(this)
 
             if isempty(this.Values); return; end
+
+            dependencies= this.getDependencies;
             for v = cell2mat(this.Values)
-                d = findobj(this.Dependencies, "Name", v.name);
+                d = findobj(dependencies, "Name", v.name);
                 if isempty(d); continue; end
 
                 d.applyValues(cell2mat(v.value));
