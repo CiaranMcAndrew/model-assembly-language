@@ -68,7 +68,7 @@ Dependencies:
 Values: []
 ```
 
-## `Fetch Instructions to populate the hierarchy`
+## Fetch Instructions to populate the hierarchy
 
 `fetchInstructions` will perform a recursive sparse checkout on the instruction hierachy to build the complete instruction set. This is useful for validating the instruction set before execution a full `fetchDependencies` command.
 
