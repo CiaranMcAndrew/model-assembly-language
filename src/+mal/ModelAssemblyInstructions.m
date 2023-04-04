@@ -12,7 +12,7 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
 
     properties
         Filename (1,1) string
-        StagingDirectory (1,1) string = "subs"
+        StagingDirectory (1,1) string = "submodules"
         Instructions = [];
         Dependencies = mal.Dependency.empty()
         Values
