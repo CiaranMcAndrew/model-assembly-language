@@ -3,7 +3,7 @@
 # Model Assembly Language
 
 [The Problem](#what-problem-does-this-solve) •
-[The Approach](#what-does-this-do) •
+[Features](#what-does-this-do) •
 [Quick Guide](#quick-guide) •
 [Detailed Guide](#detailed-guide) •
 [Examples](#examples) •
@@ -29,7 +29,7 @@
 * The Model Assembly Lanuage `MAL` is a structured language inspired by [Helm](https://helm.sh/) for use with [MATLAB](https://uk.mathworks.com/products/matlab.html).
 * It enables a user to specify the dependencies for a project in a flexible yaml-based approach.
 * Dependencies can cascade, allowing hierarchical expansion of a model structure.
-* The `MAL` enables precious control of the configuration of model hierachy, including branch, tag, and commit referencing, including injection of a lower-level configuration.
+* The `MAL` enables precise control of the configuration of model hierachy, including branch, tag, and commit referencing, including injection of a lower-level configuration.
 
 ## Quick Guide
 
@@ -96,48 +96,20 @@ values:
 
 It has the following fields:
 
-### `stagingDirectory`
-
-Relative directory where the dependencies will be located. Default is `submodules`. Individual dependencies will be located in a subfolder name matching their name.
-
-### `instructions`
-
-List additional instruction sets of `ModelAssemblyInstructions` to be read. These can specify additional `instructions`, `dependencies`, or `values`.
-
-This allows modular construction of instruction sets, reusing existing patterns and structures but with different configurations to suit various purposes.
-
-### `dependencies`
-
-List of individual dependencies, with the following attributes:
-
-### `dependencies[].type`
-
-Must be `git`. To enable future support of other types of repositories.
-
-### `dependencies[].name`
-
-Name of the dependency. If not set, this will be inherited from final element of the URL.
-
-### `dependencies[].url`
-
-URL of the dependency repository.
-
-### `dependencies[].tag | .commit | .branch`
-
-Specify a particular point in the repository to checkout, by either a specific tag, commit, or branch (in that order of preference). If a branch is specified, it will be checked out at the current HEAD. If nothing is specified, the default branch will be checked out at the current HEAD.
-
-### `dependencies[].instructions`
-
-Specify a `ModelAssemblyInstructions` within the dependency to continue a hierarchical build.
-
-### `values`
-
-Allows overwrite of variables within an instruction set at any level of hierarchy. To modify an instruction:
-
-1. Specify the dependency it belongs to by name.
-2. If the dependency is at a lower level of the hierarchy, specify the full route.
-3. Specify the name of the attribute to modify.
-4. Specify the new value of the attribute.
+| Attribute | Description |
+| --- | --- |
+| `stagingDirectory` |Relative directory where the dependencies will be located. Default is `submodules`. Individual dependencies will be located in a subfolder name matching their name. |
+| `instructions` | List additional instruction sets of `ModelAssemblyInstructions` to be read. These can specify additional `instructions`, `dependencies`, or `values`. </lb> This allows modular construction of instruction sets, reusing existing patterns and structures but with different configurations to suit various purposes. |
+| `instructions[].path` | Path to the additional instructions file. |
+| `dependencies` | List of individual dependencies, with the following attributes: |
+| `dependencies[].type` | Must be `git`. To enable future support of other types of repositories. |
+| `dependencies[].name` | Name of the dependency. If not set, this will be inherited from final element of the URL. |
+| `dependencies[].url` | URL of the dependency repository. |
+| `dependencies[].tag \| .commit \| .branch` | Specify a particular point in the repository to checkout, by either a specific tag, commit, or branch (in that order of preference). If a branch is specified, it will be checked out at the current HEAD. If nothing is specified, the default branch will be checked out at the current HEAD. |
+| `dependencies[].instructions` | Specify a `ModelAssemblyInstructions` within the dependency to continue a hierarchical build. |
+| `values` | List to allows overwrite of variables within an instruction set at any level of hierarchy. |
+| `values[].name` | Specify the name of the attribute to be overwritten. Can refer to an actual attribute, or the name of a dependency. |
+| `values[].value` | Specify the value of the attribute. If `name` is the name of a dependency, this is expected to be another name-value pair which will be applied to that dependency. |
 
 ---
 
