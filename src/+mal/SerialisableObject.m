@@ -1,5 +1,8 @@
 classdef (Abstract) SerialisableObject < handle & matlab.mixin.SetGet
-    
+    %SERIALISABLEOBJECT Abstract class for serialising class properties
+    %   SerialisableObject allows easy assignment of class properties from
+    %   data in structs.
+
     methods 
         function assignProperties(this, s)
             arguments

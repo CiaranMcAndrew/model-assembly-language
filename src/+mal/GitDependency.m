@@ -1,6 +1,14 @@
 classdef GitDependency < mal.Dependency
-    %GITDEPENDENCY Summary of this class goes here
-    %   Detailed explanation goes here
+    %GITDEPENDENCY A dependency hosted in a Git repository.
+    %   A GitDependency enables a dependency to reference a Git repository
+    %   as well as a configuration state based on Tag, Commit or Branch.
+    % 
+    %   This class requires a local installation of the Git application and 
+    %   the Git CLI to be accessible.
+    % 
+    %   This class is lightly opinionated about Git operations, deferring
+    %   tasks such as validation and authentication to the underlying Git
+    %   libraries.
 
     properties
         Name

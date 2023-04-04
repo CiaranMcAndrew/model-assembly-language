@@ -1,6 +1,14 @@
 classdef ModelAssemblyInstructions < mal.SerialisableObject
-    %MODELASSEMBLYINSTRUCTIONS Summary of this class goes here
-    %   Detailed explanation goes here
+    %MODELASSEMBLYINSTRUCTIONS Represents a set of Instructions
+    %   ModelAssemblyInstructions contain the required information to fetch
+    %   the dependencies for a modelling project.
+    % 
+    %   ModelAssemblyInstructions can be extended to include other sets of 
+    %   instructions using either the Instructions property or by
+    %   referencing a set of instructions in a dependency.
+    % 
+    %   ModelAssemblyInstructions(filename) returns an object built using
+    %   the instructions in the file filename.
 
     properties
         Filename (1,1) string
