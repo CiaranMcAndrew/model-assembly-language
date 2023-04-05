@@ -10,6 +10,8 @@
 [Contributing](#contributing) •
 [License](#license)
 
+[![View on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://uk.mathworks.com/matlabcentral/fileexchange/127419-model-assembly-language)
+[![MIT License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 </div>
 
@@ -54,6 +56,17 @@ dependencies:
   url: https://github.com/<MyOrganisation>/component-c.git
   tag: release/1.0.3
 ```
+---
+
+## Requirements
+
+* [MATLAB](https://uk.mathworks.com/products/matlab.html)
+  * Developed using R2023a
+  * _Should_ work from R2020a (untested)
+* [Git](https://git-scm.com/)
+* [yaml for MATLAB](https://uk.mathworks.com/matlabcentral/fileexchange/106765-yaml?s_tid=FX_rc3_behav) by Martin Koch
+
+---
 
 Then, fetch your dependencies using the following:
 
