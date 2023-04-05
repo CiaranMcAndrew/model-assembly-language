@@ -73,8 +73,8 @@ Full example:
 stagingDirectory: project/submodules
 
 instructions:
-- instructions/assembly.yaml
-- instructions/config.yaml
+- path: instructions/assembly.yaml
+- path: instructions/config.yaml
 
 dependencies:
 - type: git
