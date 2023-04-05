@@ -31,3 +31,9 @@ codegen/
 
 # Cloud based storage dotfile
 .MATLABDriveTag
+
+# Git submodules
+*gitmodules
+submodules/
+
+*.sty

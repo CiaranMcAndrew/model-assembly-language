@@ -1,0 +1,23 @@
+stagingDirectory: submodules/example-a
+
+instructions:
+- path: examples/submal.yaml
+
+dependencies:
+- type: git
+  url: https://github.com/CiaranMcAndrew/mal-example-a.git
+
+- type: git
+  name: mal-example-branch
+  url: https://github.com/CiaranMcAndrew/mal-example-a.git
+  branch: model-branch-a
+
+- type: git
+  name: mal-example-tag
+  url: https://github.com/CiaranMcAndrew/mal-example-a.git
+  tag: release/1.0.0
+
+- type: git
+  name: mal-example-commit
+  url: https://github.com/CiaranMcAndrew/mal-example-a.git
+  commit: 3ba5d0d
