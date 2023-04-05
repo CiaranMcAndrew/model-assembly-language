@@ -1,0 +1,6 @@
+stagingDirectory: submodules/example-b
+
+dependencies:
+- type: git
+  url: https://github.com/CiaranMcAndrew/mal-example-b.git
+  instructions: mal.yaml

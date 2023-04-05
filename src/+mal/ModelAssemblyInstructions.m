@@ -1,12 +1,25 @@
 classdef ModelAssemblyInstructions < mal.SerialisableObject
-    %MODELASSEMBLYINSTRUCTIONS Summary of this class goes here
-    %   Detailed explanation goes here
+    %MODELASSEMBLYINSTRUCTIONS Represents a set of Instructions
+    %   ModelAssemblyInstructions contain the required information to fetch
+    %   the dependencies for a modelling project.
+    % 
+    %   ModelAssemblyInstructions can be extended to include other sets of 
+    %   instructions using either the Instructions property or by
+    %   referencing a set of instructions in a dependency.
+    % 
+    %   ModelAssemblyInstructions(filename) returns an object built using
+    %   the instructions in the file filename.
 
     properties
         Filename (1,1) string
-        StagingDirectory (1,1) string = "subs"
+        StagingDirectory (1,1) string = "submodules"
         Instructions = [];
         Dependencies = mal.Dependency.empty()
+        Values
+    end
+
+    properties (SetAccess=private, Hidden=true)
+        Initialised logical = false
     end
 
     methods
@@ -46,6 +59,8 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
                     end
                 end
             end
+
+            this.Initialised = true;
         end
 
         function instructions = addInstructions(this, ins)
@@ -69,31 +84,98 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
             dependencies = this.Dependencies;
         end
 
-        function dependencies = getAllDependencies(this)
+        function dependencies = getDependencies(this, scope)
+            
+            arguments
+                this
+                scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "all"
+            end
+            
             dependencies = this.Dependencies;
-            for i = this.Instructions'
-                dependencies = [dependencies; i.Dependencies];
+
+            switch scope
+                case 'local'
+                    % Return
+
+                case 'all'
+                    for i = this.Instructions'
+                        dependencies = [dependencies; i.Dependencies];
+                    end
             end
         end
 
         function tbl = getDependencyTable(this, scope)
             arguments
                 this
-                scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "local"
+                scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "all"
             end
 
-            switch scope
-                case "local"
-                    dependencies = this.Dependencies;
-                case "all"
-                    dependencies = this.getAllDependencies();
+            dependencies = this.getDependencies(scope);
+
+            % warning('off', 'MATLAB:structOnObject');
+            tbl = struct2table(arrayfun(@toStruct, dependencies), "AsArray",true);
+            % warning('on', 'MATLAB:structOnObject');
+        end
+        
+        function fetchDependencies(this, scope)
+            arguments
+                this
+                scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "all"
             end
 
-            warning('off', 'MATLAB:structOnObject');
-            tbl = struct2table(arrayfun(@struct, dependencies));
-            warning('on', 'MATLAB:structOnObject');
+            dependencies = this.getDependencies(scope);
+            
+            % Look for staging directory and create if necessary
+            if ~isfolder(this.StagingDirectory)
+                disp("Creating staging directory: " + this.StagingDirectory);
+                mkdir(this.StagingDirectory)
+            end
+
+            % Fetch each dependency
+            % dependencies.fetch()
+            arrayfun(@(x) x.fetch(this.StagingDirectory), dependencies, 'UniformOutput', false);
+
+
+        end
+        
+        function fetchInstructions(this)
+
+            dependencies = this.getDependencies("all");
+
+            % Look for staging directory and create if necessary
+            if ~isfolder(this.StagingDirectory)
+                disp("Creating staging directory: " + this.StagingDirectory);
+                mkdir(this.StagingDirectory)
+            end
+
+            % Fetch each dependency
+            % dependencies.fetch()
+            arrayfun(@(x) x.fetchInstructions(this.StagingDirectory), dependencies, 'UniformOutput', false);
+
         end
 
+        function applyValues(this)
+
+            if isempty(this.Values); return; end
+
+            dependencies= this.getDependencies;
+            for v = cell2mat(this.Values)
+                d = findobj(dependencies, "Name", v.name);
+                if isempty(d); continue; end
+
+                d.applyValues(cell2mat(v.value));
+
+            end
+        end
+
+        function dispYaml(this)
+            yml = fileread(this.Filename);
+            disp(yml);
+        end
+
+        function str = toYaml(this)
+            str = yaml.dump(this.toStruct);
+        end
     end
 
     methods (Static)
