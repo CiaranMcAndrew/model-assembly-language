@@ -24,7 +24,7 @@ classdef GitDependency < mal.Dependency
             this.Type = "git";
         end
 
-        function fetch(this, stagingDirectory, pathspec, scope)
+        function directory = fetch(this, stagingDirectory, pathspec, scope)
             arguments
                 this
                 stagingDirectory (1,1) string = ""
