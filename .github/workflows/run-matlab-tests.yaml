@@ -17,3 +17,13 @@ jobs:
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
           source-folder: src
+      - name: Archive code coverage artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-report
+          path: code-coverage/coverage.xml
+      - name: Archive test artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: test-results/results.xml
