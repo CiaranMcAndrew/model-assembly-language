@@ -41,7 +41,7 @@ classdef GitDependecyTest < matlab.unittest.TestCase
             s.url = "https://github.com/CiaranMcAndrew/mal-example-a.git";
             obj = GitDependency.FromStruct(s);
             directory = obj.fetch(testCase.tmpDir);            
-            cmd = "cd " + directory + " && git config --local --get remote.origin.url";
+            cmd = "cd " + directory + " && git remote get-url origin";
             [status, cmdout] = system(cmd);
             testCase.verifyEqual(string(strtrim(cmdout)), s.url);
         end
@@ -50,28 +50,37 @@ classdef GitDependecyTest < matlab.unittest.TestCase
             import mal.*
             s = struct;
             s.url = "https://github.com/CiaranMcAndrew/mal-example-a.git";
-            s.branch = "mal-example-branch";
+            s.branch = "model-branch-a";
             obj = GitDependency.FromStruct(s);
             directory = obj.fetch(testCase.tmpDir);            
-            cmd = "cd " + directory + " && git config --local --get remote.origin.url";
+            cmd = "cd " + directory + " && git branch --show-current";
             [status, cmdout] = system(cmd);
-            testCase.verifyEqual(string(strtrim(cmdout)), s.url);
+            testCase.verifyEqual(string(strtrim(cmdout)), s.branch);
+        end
+
+        function fetchTagTest(testCase)
+            import mal.*
+            s = struct;
+            s.url = "https://github.com/CiaranMcAndrew/mal-example-a.git";
+            s.tag = "release/1.0.0";
+            obj = GitDependency.FromStruct(s);
+            directory = obj.fetch(testCase.tmpDir);            
+            cmd = "cd " + directory + " && git tag --points-at HEAD";
+            [status, cmdout] = system(cmd);
+            testCase.verifyTrue(contains(cmdout, s.tag));
+        end
+
+        function fetchCommitTest(testCase)
+            import mal.*
+            s = struct;
+            s.url = "https://github.com/CiaranMcAndrew/mal-example-a.git";
+            s.commit = "3ba5d0d";
+            obj = GitDependency.FromStruct(s);
+            directory = obj.fetch(testCase.tmpDir);            
+            cmd = "cd " + directory + " && git rev-parse HEAD";
+            [status, cmdout] = system(cmd);
+            testCase.verifyTrue(contains(cmdout, s.commit));
         end
     end
 
 end
-
-% instructions = 
-%   ModelAssemblyInstructions with properties:
-% 
-%             Filename: "examples\example-a-basic-usage\example-a.yaml"
-%     StagingDirectory: "submodules/example-a"
-%         Instructions: [1×1 mal.ModelAssemblyInstructions]
-%         Dependencies: [4×1 mal.GitDependency]
-%               Values: []
-% 
-% Adding local git repo: mal-example-a.git - https://github.com/CiaranMcAndrew/mal-example-a.git
-% Adding local git repo: mal-example-branch - https://github.com/CiaranMcAndrew/mal-example-a.git
-% Adding local git repo: mal-example-tag - https://github.com/CiaranMcAndrew/mal-example-a.git
-% Adding local git repo: mal-example-commit - https://github.com/CiaranMcAndrew/mal-example-a.git
-% Adding local git repo: model-subref - https://github.com/CiaranMcAndrew/mal-example-a.git
