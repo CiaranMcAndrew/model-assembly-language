@@ -15,6 +15,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 ![language](https://shields.io/github/languages/top/CiaranMcAndrew/model-assembly-language)
 [![Latest Release](https://shields.io/github/v/release/CiaranMcAndrew/model-assembly-language?display_name=tag)](https://github.com/CiaranMcAndrew/model-assembly-language/releases/latest)
+[![Tests](https://github.com/CiaranMcAndrew/model-assembly-language/actions/workflows/run-matlab-tests.yaml/badge.svg)](https://github.com/CiaranMcAndrew/model-assembly-language/actions/workflows/run-matlab-tests.yaml)
 
 </div>
 
