@@ -1,4 +1,4 @@
-name: Run MATLAB Tests on GitHub-Hosted Runner
+name: Tests
 on: 
     push:
         branches: ["main", "adding-action-workflow"]
