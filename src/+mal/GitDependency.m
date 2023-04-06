@@ -48,15 +48,15 @@ classdef GitDependency < mal.Dependency
             try
                 % Clone repository
                 cmd = "git clone -n " + this.Url + " .";
-                this.ExecCmd(cmd)
+                this.ExecCmd(cmd);
 
                 % Fetch
                 cmd = "git fetch --all";
-                this.ExecCmd(cmd)
+                this.ExecCmd(cmd);
 
                 % Pull
                 cmd = "git pull origin";
-                this.ExecCmd(cmd)
+                this.ExecCmd(cmd);
 
                 % Checkout Tag, Commit, or Branch
                 cmd = "git checkout ";
@@ -74,7 +74,8 @@ classdef GitDependency < mal.Dependency
                     disp("Executing git cmd: " + cmd)
                 end
 
-                this.ExecCmd(cmd);
+                [~, cmdout] = this.ExecCmd(cmd);
+                disp("git command returned status: " + cmdout)
 
                 % Update Instructions
                 if ~isempty(this.Instructions)
@@ -144,7 +145,7 @@ classdef GitDependency < mal.Dependency
     end
 
     methods (Static, Access=private)
-        function ExecCmd(cmd, raiseError, raiseWarn, onError)
+        function [status, cmdout] = ExecCmd(cmd, raiseError, raiseWarn, onError)
             arguments
                 cmd string
                 raiseError logical = true
