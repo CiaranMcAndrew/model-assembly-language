@@ -27,3 +27,6 @@ jobs:
         with:
           name: test-results
           path: test-results/results.xml
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        files: code-coverage/coverage.xml # optional
