@@ -16,9 +16,7 @@
 ![language](https://shields.io/github/languages/top/CiaranMcAndrew/model-assembly-language)
 [![Latest Release](https://shields.io/github/v/release/CiaranMcAndrew/model-assembly-language?display_name=tag)](https://github.com/CiaranMcAndrew/model-assembly-language/releases/latest)
 [![Tests](https://github.com/CiaranMcAndrew/model-assembly-language/actions/workflows/run-matlab-tests.yaml/badge.svg)](https://github.com/CiaranMcAndrew/model-assembly-language/actions/workflows/run-matlab-tests.yaml)
-![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/CiaranMcAndrew/model-assembly-language/adding-action-workflow/.github/badges/jacoco.json)
-
- [![codecov](https://codecov.io/gh/patrykkrawczyk/TDDAndDesignPatternsExample/branch/master/graph/badge.svg)](https://codecov.io/gh/patrykkrawczyk/TDDAndDesignPatternsExample/branch/master)
+ [![codecov](https://codecov.io/github/CiaranMcAndrew/model-assembly-language/branch/adding-action-workflow/graph/badge.svg)](https://app.codecov.io/github/CiaranMcAndrew/model-assembly-language/tree/adding-action-workflow)
 
 </div>
 
