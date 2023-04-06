@@ -96,7 +96,7 @@ classdef GitDependecyTest < matlab.unittest.TestCase
             s.tag = "release/1.0.0";
             obj = GitDependency.FromStruct(s);
             directory = obj.fetch(testCase.tmpDir);            
-            cmd = "cd " + directory + " && git tag --points-at HEAD";
+            cmd = "cd " + directory + " && git tag --points-at";
             [status, cmdout] = system(cmd);
             testCase.verifyTrue(contains(cmdout, s.tag));
         end
