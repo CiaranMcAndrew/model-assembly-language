@@ -26,7 +26,7 @@ classdef (Abstract) Dependency < mal.SerialisableObject & matlab.mixin.Heterogen
     end
 
     methods (Abstract)
-        fetch(this)
+        directory = fetch(this)
         fetchInstructions(this)
     end
 

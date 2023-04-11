@@ -1,0 +1,5 @@
+dependencies:
+- type: git
+  name: mal-example-branch
+  url: https://github.com/CiaranMcAndrew/mal-example-a.git
+  branch: model-branch-a

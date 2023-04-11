@@ -1,0 +1,5 @@
+dependencies:
+- type: git
+  name: mal-example-tag
+  url: https://github.com/CiaranMcAndrew/mal-example-a.git
+  tag: release/1.0.0

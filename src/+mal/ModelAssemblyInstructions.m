@@ -117,7 +117,7 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
             % warning('on', 'MATLAB:structOnObject');
         end
         
-        function fetchDependencies(this, scope)
+        function [dependencies, directories] = fetchDependencies(this, scope)
             arguments
                 this
                 scope (1,1) string {mustBeMember(scope, ["local", "all"])} = "all"
@@ -133,7 +133,7 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
 
             % Fetch each dependency
             % dependencies.fetch()
-            arrayfun(@(x) x.fetch(this.StagingDirectory), dependencies, 'UniformOutput', false);
+            directories = arrayfun(@(x) x.fetch(this.StagingDirectory), dependencies, 'UniformOutput', false);
 
 
         end
@@ -166,6 +166,13 @@ classdef ModelAssemblyInstructions < mal.SerialisableObject
                 d.applyValues(cell2mat(v.value));
 
             end
+        end
+
+        function  [dependencies, directories] = fetch(this)
+            this.fetchInstructions();
+            this.applyValues();
+            [dependencies, directories] = this.fetchDependencies();
+
         end
 
         function dispYaml(this)
