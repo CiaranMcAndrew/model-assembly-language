@@ -24,6 +24,24 @@ classdef GitDependency < mal.Dependency
             this.Type = "git";
         end
 
+        function directory = getFullyQualifiedDirectory(this, stagingDirectory)
+            arguments
+                this
+                stagingDirectory (1,1) {mustBeA(stagingDirectory, ["string", "mal.ModelAssemblyInstructions"])}
+            end
+
+            switch class(stagingDirectory)
+                case "string"
+                    % Do nothing
+                case "mal.ModelAssemblyInstructions"
+                    stagingDirectory = stagingDirectory.StagingDirectory;
+                otherwise 
+                    error("Type error, stagingDirectorty must be a string or ModelAssemblyInstructions. Instead is " + class(stagingDirectory))
+            end
+
+            directory = join([stagingDirectory, this.Name], '/');
+        end
+
         function directory = fetch(this, stagingDirectory, pathspec, scope)
             arguments
                 this
@@ -33,7 +51,7 @@ classdef GitDependency < mal.Dependency
             end
 
             disp("Adding local git repo: " + this.Name + " - " + this.Url);
-            directory = join([stagingDirectory, this.Name], '/');
+            directory = this.getFullyQualifiedDirectory(stagingDirectory); 
 
             % Delete directory
             status = rmdir(directory, 's');

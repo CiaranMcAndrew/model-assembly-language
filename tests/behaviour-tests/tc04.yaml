@@ -1,0 +1,6 @@
+dependencies:
+
+- type: git
+  name: mal-example-commit
+  url: https://github.com/CiaranMcAndrew/mal-example-a.git
+  commit: 3ba5d0d

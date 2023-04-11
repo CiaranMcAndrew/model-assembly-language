@@ -61,6 +61,15 @@ dependencies:
   url: https://github.com/<MyOrganisation>/component-c.git
   tag: release/1.0.3
 ```
+
+Then, fetch your dependencies using the following:
+
+```matlab
+mal.fetchInstructionSet("mal.yaml")
+```
+
+The dependencies will then be checked-out into the `submodules/<dependencyName>` folder.
+
 ---
 
 ## Requirements
@@ -72,14 +81,6 @@ dependencies:
 * [yaml for MATLAB](https://uk.mathworks.com/matlabcentral/fileexchange/106765-yaml?s_tid=FX_rc3_behav) by Martin Koch
 
 ---
-
-Then, fetch your dependencies using the following:
-
-```matlab
-mal.fetchInstructionSet("mal.yaml")
-```
-
-The dependencies will then be checked-out into the `submodules/<dependencyName>` folder.
 
 ## Detailed Guide
 

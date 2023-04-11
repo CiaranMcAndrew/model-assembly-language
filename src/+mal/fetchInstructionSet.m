@@ -1,4 +1,4 @@
-function fetchInstructionSet(filename)
+function [instructions, dependencies, directories] = fetchInstructionSet(filename)
 
 arguments
     filename string = "mal.yaml"
@@ -7,6 +7,6 @@ end
 import mal.*
 
 instructions = ModelAssemblyInstructions.FromYaml(filename);
-instructions.fetch();
+[dependencies, directories] = instructions.fetch();
 
 end

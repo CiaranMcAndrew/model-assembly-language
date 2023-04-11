@@ -1,7 +1,9 @@
 name: Tests
 on: 
     push:
-        branches: ["main", "adding-action-workflow"]
+        branches: ["main"]
+    pull_request:
+        types: [opened, reopened]
 jobs:
   my-job:
     name: Run MATLAB Tests and Generate Artifacts
